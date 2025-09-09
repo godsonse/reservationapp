@@ -1,0 +1,32 @@
+-- Création de la base de données
+CREATE DATABASE IF NOT EXISTS reservation_salles;
+USE reservation_salles;
+
+-- Table des utilisateurs
+CREATE TABLE IF NOT EXISTS utilisateurs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    motDePasse VARCHAR(255) NOT NULL,
+    role ENUM('admin','utilisateur') DEFAULT 'utilisateur'
+);
+
+-- Table des salles
+CREATE TABLE IF NOT EXISTS salles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    capacite INT NOT NULL,
+    localisation VARCHAR(100)
+);
+
+-- Table des réservations
+CREATE TABLE IF NOT EXISTS reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    utilisateurId INT NOT NULL,
+    salleId INT NOT NULL,
+    dateDebut DATETIME NOT NULL,
+    dateFin DATETIME NOT NULL,
+    statut ENUM('confirmée','annulée','modifiée') DEFAULT 'confirmée',
+    FOREIGN KEY (utilisateurId) REFERENCES utilisateurs(id) ON DELETE CASCADE,
+    FOREIGN KEY (salleId) REFERENCES salles(id) ON DELETE CASCADE
+);
